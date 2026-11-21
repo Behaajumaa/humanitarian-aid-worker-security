@@ -1,0 +1,22 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Incidents","Countries"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+ref table Incidents
+ref table Countries
+ref table 'Org Type'
+ref table Outcome
+ref table DateTableTemplate_342ee26b-8735-4c99-a640-7dc3d2af36bc
+ref table LocalDateTable_ee70757e-85e4-4ac8-a019-019f0e6c68c4
+

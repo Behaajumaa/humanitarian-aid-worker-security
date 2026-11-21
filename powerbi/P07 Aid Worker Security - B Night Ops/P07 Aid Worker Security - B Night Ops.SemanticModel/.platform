@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "P07 Aid Worker Security - B Night Ops"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "69a51d77-6d1e-4057-a21e-5a2bb90e2482"
+  }
+}

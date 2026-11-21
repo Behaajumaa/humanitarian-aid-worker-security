@@ -1,0 +1,21 @@
+table 'Org Type'
+	lineageTag: c49bf357-1fd5-40ed-9311-5ff198098c0a
+
+	column Org
+		dataType: string
+		lineageTag: 1bb51f72-3242-4620-a776-f6efbdc30810
+		summarizeBy: none
+		sourceColumn: [Org]
+		sortByColumn: Sort
+
+	column Sort
+		dataType: int64
+		isHidden
+		lineageTag: 208e5057-614f-4583-b55b-318ac6264f24
+		summarizeBy: none
+		sourceColumn: [Sort]
+
+	partition 'Org Type' = calculated
+		mode: import
+		source = DATATABLE("Org", STRING, "Sort", INTEGER, {{"INGO", 1}, {"National NGO", 2}, {"UN", 3}, {"Red Cross / Crescent & other", 4}})
+

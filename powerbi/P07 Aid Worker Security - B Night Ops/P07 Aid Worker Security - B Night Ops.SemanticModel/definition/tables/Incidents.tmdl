@@ -1,0 +1,500 @@
+table Incidents
+	lineageTag: e6c95e4d-9c21-4a43-a6df-320ff8e49a6b
+
+	measure Incidents = COUNTROWS(Incidents)
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: ad30748a-169b-4c85-bb2d-b4ab4998d588
+
+	measure Affected = SUM(Incidents[total_affected])
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: 498f3b83-1e06-4798-bd21-d223d060039a
+
+	measure Killed = SUM(Incidents[total_killed])
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: 4fadb753-7313-4f13-8f0c-1b79ed381769
+
+	measure Wounded = SUM(Incidents[total_wounded])
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: d566f5e3-63dc-410d-8585-39b71c78ecd1
+
+	measure Kidnapped = SUM(Incidents[total_kidnapped])
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: 4e57653d-991c-458c-bd2d-213eb5cb8dc0
+
+	measure 'Not Killed' = [Affected] - [Killed]
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: a4ca769f-fb64-461f-9aa3-9985fb4716c1
+
+	measure 'Fatality Rate' = DIVIDE([Killed], [Affected])
+		formatString: 0%
+		displayFolder: KPI
+		lineageTag: 94d7cb2f-c90d-4387-a02c-7ec2f04f3428
+
+	measure Countries = CALCULATE(DISTINCTCOUNT(Incidents[country]), Incidents[country] <> "Unknown")
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: 316d2d36-4298-4200-a52a-d9934057348f
+
+	measure 'National Staff %' = DIVIDE(SUM(Incidents[total_nationals]), [Affected])
+		formatString: 0%
+		displayFolder: Staff
+		lineageTag: 1d554960-030a-4943-a6c2-efb7ce711af1
+
+	measure 'International Staff %' = DIVIDE(SUM(Incidents[total_internationals]), [Affected])
+		formatString: 0%
+		displayFolder: Staff
+		lineageTag: f57e4bfd-f14a-4f02-915f-806ede4ce7be
+
+	measure 'National Deaths %' = DIVIDE(SUM(Incidents[nationals_killed]), [Killed])
+		formatString: 0%
+		displayFolder: Staff
+		lineageTag: 73326aa5-9bad-4601-8611-8d25bb93de34
+
+	measure 'International Deaths %' = DIVIDE(SUM(Incidents[internationals_killed]), [Killed])
+		formatString: 0%
+		displayFolder: Staff
+		lineageTag: b809ed72-ce5f-4028-99b3-dd16f2975f16
+
+	measure 'National by Outcome' = SWITCH(SELECTEDVALUE(Outcome[Outcome]), "Killed", SUM(Incidents[nationals_killed]), "Wounded", SUM(Incidents[nationals_wounded]), "Kidnapped", SUM(Incidents[nationals_kidnapped]))
+		formatString: #,0
+		displayFolder: Staff
+		lineageTag: 540f03a0-aacc-4f34-a50c-e5a7e1b86dce
+
+	measure 'National by Outcome (Left)' = -[National by Outcome]
+		formatString: #,0;#,0
+		displayFolder: Staff
+		lineageTag: 8a4f8ea5-32f7-40db-8441-5d789ea9801d
+
+	measure 'International by Outcome' = SWITCH(SELECTEDVALUE(Outcome[Outcome]), "Killed", SUM(Incidents[internationals_killed]), "Wounded", SUM(Incidents[internationals_wounded]), "Kidnapped", SUM(Incidents[internationals_kidnapped]))
+		formatString: #,0
+		displayFolder: Staff
+		lineageTag: 3b21818b-7732-4b9c-8099-0a9910d56a6a
+
+	measure 'Country Rank' = IF(ISINSCOPE(Incidents[country]), RANKX(ALLSELECTED(Incidents[country]), [Affected], , DESC, Dense))
+		formatString: 0
+		displayFolder: Where
+		lineageTag: 368ea788-a914-4c63-b603-5809412ac11c
+
+	measure 'Affected Top7' = IF([Country Rank] <= 7, [Affected])
+		formatString: #,0
+		displayFolder: Where
+		lineageTag: 3fd1c740-89e3-4d5d-9741-4bbbebdefb93
+
+	measure 'Killed Top7' = IF([Country Rank] <= 7, [Killed])
+		formatString: #,0
+		displayFolder: Where
+		lineageTag: 30b40de1-6da8-4905-ab23-13c3342bbce4
+
+	measure 'Survived Top7' = IF([Country Rank] <= 7, [Not Killed])
+		formatString: #,0
+		displayFolder: Where
+		lineageTag: f127fba9-3298-48c7-bfdc-c7c758edf03b
+
+	measure 'Avg Latitude' = AVERAGE(Incidents[latitude])
+		formatString: 0.00
+		displayFolder: Where
+		lineageTag: 1a15c020-0648-458f-af34-faa8f735c466
+
+	measure 'Avg Longitude' = AVERAGE(Incidents[longitude])
+		formatString: 0.00
+		displayFolder: Where
+		lineageTag: 41f1a0f8-33c1-469d-be35-228708c3a379
+
+	measure 'Affected Known Type' = IF(SELECTEDVALUE(Incidents[attack_category]) <> "Unknown", [Affected])
+		formatString: #,0
+		displayFolder: How
+		lineageTag: 598e4583-4565-460f-8135-88500d25b522
+
+	measure 'Killed % Known Type' = IF(SELECTEDVALUE(Incidents[attack_category]) <> "Unknown", DIVIDE([Killed], [Affected]))
+		formatString: 0%
+		displayFolder: How
+		lineageTag: dce806a5-d1f1-4839-a7c8-1eda7a0d9998
+
+	measure 'Wounded % Known Type' = IF(SELECTEDVALUE(Incidents[attack_category]) <> "Unknown", DIVIDE([Wounded], [Affected]))
+		formatString: 0%
+		displayFolder: How
+		lineageTag: c87961ea-5502-4334-9dd2-1104fd58e86f
+
+	measure 'Kidnapped % Known Type' = IF(SELECTEDVALUE(Incidents[attack_category]) <> "Unknown", DIVIDE([Kidnapped], [Affected]))
+		formatString: 0%
+		displayFolder: How
+		lineageTag: 34e38ea3-989b-44a9-8242-40b94bce7d8c
+
+	measure 'Road Share' = DIVIDE(CALCULATE([Affected], Incidents[location_type] = "Road"), [Affected])
+		formatString: 0%
+		displayFolder: How
+		lineageTag: 422cb151-6847-4058-925a-e6853ab52108
+
+	measure 'Ambush Share' = DIVIDE(CALCULATE([Affected], Incidents[attack_context] = "Ambush"), [Affected])
+		formatString: 0%
+		displayFolder: How
+		lineageTag: d63786ee-1d46-4cf4-9acc-0ae938cae387
+
+	measure 'Actor Share' = DIVIDE([Affected], CALCULATE([Affected], ALLSELECTED(Incidents[actor_group])))
+		formatString: 0%
+		displayFolder: Who
+		lineageTag: e7551201-ecbd-4af9-915d-09450a5b2a82
+
+	measure 'Org Victims' = SWITCH(SELECTEDVALUE('Org Type'[Org]), "INGO", SUM(Incidents[ingo]), "National NGO", SUM(Incidents[nngo]), "UN", SUM(Incidents[un]), "Red Cross / Crescent & other", SUM(Incidents[icrc]) + SUM(Incidents[nrcs_and_ifrc]) + SUM(Incidents[other]))
+		formatString: #,0
+		displayFolder: Who
+		lineageTag: 960065ae-c53b-4fd6-8c6d-e19834c2f2eb
+
+	measure 'Org Share' = DIVIDE([Org Victims], SUM(Incidents[ingo]) + SUM(Incidents[nngo]) + SUM(Incidents[un]) + SUM(Incidents[icrc]) + SUM(Incidents[nrcs_and_ifrc]) + SUM(Incidents[other]))
+		formatString: 0%
+		displayFolder: Who
+		lineageTag: 9daf749c-4f6a-49eb-9205-e4381ac57183
+
+	measure 'Note Countries' = "in " & FORMAT([Countries], "#,0") & " countries"
+		displayFolder: Notes
+		lineageTag: 57350156-07bc-4c9a-bedc-a2c38c0eb8e1
+
+	measure 'Note Countries Short' = FORMAT([Countries], "#,0") & " countries"
+		displayFolder: Notes
+		lineageTag: 87b92d16-239d-4435-b91d-cfa7ff633e63
+
+	measure 'Note Fatality' = FORMAT([Fatality Rate], "0%") & " fatality"
+		displayFolder: Notes
+		lineageTag: 5e70584c-5f9b-4abf-9e07-f6f188c8394e
+
+	measure 'Note Road' = "attacked on the road · " & FORMAT([Ambush Share], "0%") & " in ambushes"
+		displayFolder: Notes
+		lineageTag: 187f0935-76e5-4291-9190-ff255975c208
+
+	measure 'Note Peak Affected' = VAR t = TOPN(1, ADDCOLUMNS(VALUES(Incidents[year]), "@v", [Affected]), [@v], DESC) RETURN IF(NOT ISEMPTY(t), "record " & FORMAT(MAXX(t, [@v]), "#,0") & " in " & MAXX(t, Incidents[year]))
+		displayFolder: Notes
+		lineageTag: 3965a3df-15b3-40aa-9062-0a17a2d63f5d
+
+	measure 'Note Peak Killed' = VAR t = TOPN(1, ADDCOLUMNS(VALUES(Incidents[year]), "@v", [Killed]), [@v], DESC) RETURN IF(NOT ISEMPTY(t), "peak " & FORMAT(MAXX(t, [@v]), "#,0") & " in " & MAXX(t, Incidents[year]))
+		displayFolder: Notes
+		lineageTag: 49b7b02c-028f-4dac-8ddf-b362f00f3249
+
+	measure 'Note Latest Fatality' = VAR y = MAX(Incidents[year]) RETURN FORMAT(CALCULATE([Fatality Rate], Incidents[year] = y), "0%") & " in " & y
+		displayFolder: Notes
+		lineageTag: 146f27b9-8694-4dc9-8696-adfa46fe24be
+
+	measure 'Note National' = "of victims · " & FORMAT([National Deaths %], "0%") & " of deaths"
+		displayFolder: Notes
+		lineageTag: 58082697-15d0-4df7-8551-817423b6937d
+
+	column incident_id
+		dataType: int64
+		lineageTag: 35d7a2ed-5df6-420d-b036-f2c1dafb5b65
+		summarizeBy: sum
+		sourceColumn: incident_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: 33fe3047-db47-40dc-ac1f-fdb151f094e5
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		lineageTag: beebea62-cafc-45e2-8357-7f69173a9c98
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column incident_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 356db6ee-dda4-4870-b0b9-d4a886dd014f
+		summarizeBy: none
+		sourceColumn: incident_date
+
+		variation Variation
+			isDefault
+			relationship: e90aa7a9-d600-4b3e-9e30-a53b3963586f
+			defaultHierarchy: LocalDateTable_5e6836f9-f858-41b9-b7f7-9aa15100da3b.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column date_precision
+		dataType: string
+		lineageTag: 601fd1ab-055d-4bb4-ad60-abaf65115e30
+		summarizeBy: none
+		sourceColumn: date_precision
+
+	column country_code
+		dataType: string
+		lineageTag: a92086f5-285d-4d51-aa6b-a0923dc70958
+		summarizeBy: none
+		sourceColumn: country_code
+
+	column country
+		dataType: string
+		lineageTag: 51692a26-30c3-450d-84fd-e58a1efbe78f
+		summarizeBy: none
+		sourceColumn: country
+
+	column admin1
+		dataType: string
+		lineageTag: 4efd1c87-834f-427d-9fdd-51c02df81371
+		summarizeBy: none
+		sourceColumn: admin1
+
+	column un
+		dataType: int64
+		lineageTag: 07b59e6f-21ee-4de2-9803-7eead4a85eed
+		summarizeBy: sum
+		sourceColumn: un
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingo
+		dataType: int64
+		lineageTag: 46bacdc0-af4c-4e08-b27c-4962b09d8fd1
+		summarizeBy: sum
+		sourceColumn: ingo
+
+		annotation SummarizationSetBy = Automatic
+
+	column icrc
+		dataType: int64
+		lineageTag: b255f3e6-9d13-494c-874e-393e53ddc513
+		summarizeBy: sum
+		sourceColumn: icrc
+
+		annotation SummarizationSetBy = Automatic
+
+	column nrcs_and_ifrc
+		dataType: int64
+		lineageTag: bd409f9d-21b8-42a3-8842-e87996acb963
+		summarizeBy: sum
+		sourceColumn: nrcs_and_ifrc
+
+		annotation SummarizationSetBy = Automatic
+
+	column nngo
+		dataType: int64
+		lineageTag: 847fea49-5809-4295-87c8-5999c65e2f4a
+		summarizeBy: sum
+		sourceColumn: nngo
+
+		annotation SummarizationSetBy = Automatic
+
+	column other
+		dataType: int64
+		lineageTag: db2bc1fd-4f2a-49c0-802b-57dd42d1e0bd
+		summarizeBy: sum
+		sourceColumn: other
+
+		annotation SummarizationSetBy = Automatic
+
+	column main_org_type
+		dataType: string
+		lineageTag: f1b2099c-28d4-49f0-82ae-495496d12d7a
+		summarizeBy: none
+		sourceColumn: main_org_type
+
+	column nationals_killed
+		dataType: int64
+		lineageTag: eab7cbcc-3764-4f9e-aaaf-42604c1b733f
+		summarizeBy: sum
+		sourceColumn: nationals_killed
+
+		annotation SummarizationSetBy = Automatic
+
+	column nationals_wounded
+		dataType: int64
+		lineageTag: d5536adf-c470-4827-9b71-d3224874be4b
+		summarizeBy: sum
+		sourceColumn: nationals_wounded
+
+		annotation SummarizationSetBy = Automatic
+
+	column nationals_kidnapped
+		dataType: int64
+		lineageTag: d708d53d-d3db-4ce2-9d07-8aab86ffb5a4
+		summarizeBy: sum
+		sourceColumn: nationals_kidnapped
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_nationals
+		dataType: int64
+		lineageTag: 6e87946f-726f-43a2-9961-e6e0fffbc7c9
+		summarizeBy: sum
+		sourceColumn: total_nationals
+
+		annotation SummarizationSetBy = Automatic
+
+	column internationals_killed
+		dataType: int64
+		lineageTag: 06daf290-f686-440b-9130-bc7a7e547d8b
+		summarizeBy: sum
+		sourceColumn: internationals_killed
+
+		annotation SummarizationSetBy = Automatic
+
+	column internationals_wounded
+		dataType: int64
+		lineageTag: 1c8e643c-f35e-497d-841c-a1a248cf2c04
+		summarizeBy: sum
+		sourceColumn: internationals_wounded
+
+		annotation SummarizationSetBy = Automatic
+
+	column internationals_kidnapped
+		dataType: int64
+		lineageTag: 0f6d2e33-d4f9-4b7c-9d7c-d3c4a3180b6c
+		summarizeBy: sum
+		sourceColumn: internationals_kidnapped
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_internationals
+		dataType: int64
+		lineageTag: 12bdf900-dbdc-43e2-8c95-831db71e7ffe
+		summarizeBy: sum
+		sourceColumn: total_internationals
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_killed
+		dataType: int64
+		lineageTag: d43d9855-5bdc-4404-b532-4cc1189c2ef4
+		summarizeBy: sum
+		sourceColumn: total_killed
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_wounded
+		dataType: int64
+		lineageTag: 9fcce0ed-9938-4695-b076-3b210a1a12e8
+		summarizeBy: sum
+		sourceColumn: total_wounded
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_kidnapped
+		dataType: int64
+		lineageTag: 12a28668-e14f-4a22-a742-53e6e2fde333
+		summarizeBy: sum
+		sourceColumn: total_kidnapped
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_affected
+		dataType: int64
+		lineageTag: 6aefd3af-c542-4cdd-82f9-26b1d335633c
+		summarizeBy: sum
+		sourceColumn: total_affected
+
+		annotation SummarizationSetBy = Automatic
+
+	column means_of_attack
+		dataType: string
+		lineageTag: 3e201871-cc37-4bba-b411-22cc32228ae7
+		summarizeBy: none
+		sourceColumn: means_of_attack
+
+	column attack_category
+		dataType: string
+		lineageTag: 5206793f-74f2-4863-8ba9-cb0bf87edaa5
+		summarizeBy: none
+		sourceColumn: attack_category
+
+	column attack_context
+		dataType: string
+		lineageTag: bf51fc29-f808-4792-b7c4-08db3c57cb95
+		summarizeBy: none
+		sourceColumn: attack_context
+
+	column location_type
+		dataType: string
+		lineageTag: 584bd32b-dcd5-4e5d-9e31-a59a60a937c8
+		summarizeBy: none
+		sourceColumn: location_type
+
+	column latitude
+		dataType: double
+		lineageTag: ac6078ba-19d3-4e9a-9b9f-891742e7bf78
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: double
+		lineageTag: d9011e1d-30ec-44d0-af69-62a8d194db0f
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column motive
+		dataType: string
+		lineageTag: 2ccd1a0f-fb7e-484f-b2ca-c5099635e1e2
+		summarizeBy: none
+		sourceColumn: motive
+
+	column actor_type
+		dataType: string
+		lineageTag: 08732c05-0e95-4cf6-8484-acea400817b0
+		summarizeBy: none
+		sourceColumn: actor_type
+
+	column actor_group
+		dataType: string
+		lineageTag: a1857798-fe8d-4f90-ae7a-dc51767e4c5a
+		summarizeBy: none
+		sourceColumn: actor_group
+
+	column verified
+		dataType: string
+		lineageTag: b60af35b-3f74-4874-8373-91002eda2073
+		summarizeBy: none
+		sourceColumn: verified
+
+	column source
+		dataType: string
+		lineageTag: 318d0604-b4e9-419b-9d73-1c6bc8ce518b
+		summarizeBy: none
+		sourceColumn: source
+
+	column is_partial_year
+		dataType: int64
+		lineageTag: f75d4b16-90fa-4b27-a757-f04dada51533
+		summarizeBy: sum
+		sourceColumn: is_partial_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column dq_flag
+		dataType: string
+		lineageTag: 8b1343c9-adc1-49f2-bf1d-02ac72c64ed8
+		summarizeBy: none
+		sourceColumn: dq_flag
+
+	column geo_cell
+		dataType: string
+		lineageTag: 392d8d8f-8e81-4c6e-b8ba-68527ae9bdc8
+		summarizeBy: none
+		sourceColumn: geo_cell
+
+	partition Incidents = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Desktop\Data Analysis Projects\07_Humanitarian_Aid_Analysis\data\clean\fact_incidents.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Selected = Table.SelectColumns(Promoted, {"incident_id", "year", "month", "incident_date", "date_precision", "country_code", "country", "admin1", "un", "ingo", "icrc", "nrcs_and_ifrc", "nngo", "other", "main_org_type", "nationals_killed", "nationals_wounded", "nationals_kidnapped", "total_nationals", "internationals_killed", "internationals_wounded", "internationals_kidnapped", "total_internationals", "total_killed", "total_wounded", "total_kidnapped", "total_affected", "means_of_attack", "attack_category", "attack_context", "location_type", "latitude", "longitude", "motive", "actor_type", "actor_group", "verified", "source", "is_partial_year", "dq_flag"}),
+				    Blanks = Table.ReplaceValue(Selected, "", null, Replacer.ReplaceValue, {"incident_id", "year", "month", "incident_date", "date_precision", "country_code", "country", "admin1", "un", "ingo", "icrc", "nrcs_and_ifrc", "nngo", "other", "main_org_type", "nationals_killed", "nationals_wounded", "nationals_kidnapped", "total_nationals", "internationals_killed", "internationals_wounded", "internationals_kidnapped", "total_internationals", "total_killed", "total_wounded", "total_kidnapped", "total_affected", "means_of_attack", "attack_category", "attack_context", "location_type", "latitude", "longitude", "motive", "actor_type", "actor_group", "verified", "source", "is_partial_year", "dq_flag"}),
+				    Typed = Table.TransformColumnTypes(Blanks, {{"incident_id", Int64.Type}, {"year", Int64.Type}, {"month", Int64.Type}, {"incident_date", type date}, {"date_precision", type text}, {"country_code", type text}, {"country", type text}, {"admin1", type text}, {"un", Int64.Type}, {"ingo", Int64.Type}, {"icrc", Int64.Type}, {"nrcs_and_ifrc", Int64.Type}, {"nngo", Int64.Type}, {"other", Int64.Type}, {"main_org_type", type text}, {"nationals_killed", Int64.Type}, {"nationals_wounded", Int64.Type}, {"nationals_kidnapped", Int64.Type}, {"total_nationals", Int64.Type}, {"internationals_killed", Int64.Type}, {"internationals_wounded", Int64.Type}, {"internationals_kidnapped", Int64.Type}, {"total_internationals", Int64.Type}, {"total_killed", Int64.Type}, {"total_wounded", Int64.Type}, {"total_kidnapped", Int64.Type}, {"total_affected", Int64.Type}, {"means_of_attack", type text}, {"attack_category", type text}, {"attack_context", type text}, {"location_type", type text}, {"latitude", type number}, {"longitude", type number}, {"motive", type text}, {"actor_type", type text}, {"actor_group", type text}, {"verified", type text}, {"source", type text}, {"is_partial_year", Int64.Type}, {"dq_flag", type text}}, "en-US"),
+				    GeoCell = Table.AddColumn(Typed, "geo_cell", each if [latitude] = null or [longitude] = null then null else Number.ToText(Number.Round([latitude] / 1.5) * 1.5, "0.0", "en-US") & "|" & Number.ToText(Number.Round([longitude] / 1.5) * 1.5, "0.0", "en-US"), type text)
+				in
+				    GeoCell
+

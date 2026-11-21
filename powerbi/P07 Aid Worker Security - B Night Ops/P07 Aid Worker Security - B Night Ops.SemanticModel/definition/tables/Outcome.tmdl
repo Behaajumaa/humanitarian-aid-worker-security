@@ -1,0 +1,21 @@
+table Outcome
+	lineageTag: 696f60c0-084f-4dfb-a98c-6e49e2ed988d
+
+	column Outcome
+		dataType: string
+		lineageTag: c1561497-2f42-40e9-942d-c4dcfcd38ceb
+		summarizeBy: none
+		sourceColumn: [Outcome]
+		sortByColumn: Sort
+
+	column Sort
+		dataType: int64
+		isHidden
+		lineageTag: cddfb35e-5563-493a-93e3-42deca869f12
+		summarizeBy: none
+		sourceColumn: [Sort]
+
+	partition Outcome = calculated
+		mode: import
+		source = DATATABLE("Outcome", STRING, "Sort", INTEGER, {{"Killed", 1}, {"Wounded", 2}, {"Kidnapped", 3}})
+

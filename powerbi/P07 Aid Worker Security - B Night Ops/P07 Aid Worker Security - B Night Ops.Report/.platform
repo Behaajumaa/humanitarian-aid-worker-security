@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "P07 Aid Worker Security - B Night Ops"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "66c1da14-9a85-43de-b11f-92a7c6db9331"
+  }
+}

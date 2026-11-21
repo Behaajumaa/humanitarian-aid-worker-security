@@ -1,0 +1,21 @@
+step,issue,rows_affected,action
+0,Raw rows loaded,4153,Baseline
+0,Duplicate incident_id,0,None found - no action
+1,Text values with leading/trailing spaces or line breaks,1192,"Trimmed (means_of_attack, actor_type, source, details ...)"
+2,"Inconsistent source labels (case / typo: ""media"", ""Focal point"", ""Offiicial Report"")",5,Mapped to 5 standard labels
+2,"verified = ""Pen"" (truncated) or blank",2,"""Pen"" -> Pending, blank -> Unknown"
+2,"actor_type case variants (""Host State"" vs ""Host state"", ""State: unknown"")",39,Unified spelling
+2,Missing motive / actor_name,8,Set to Unknown
+3,"Missing country (ICRC year-level records, no location)",6,"Country = ""Unknown"", code = ""XX"""
+3,"Missing ISO code for disputed areas (Chechnya, Kashmir)",27,"Code = ""XX"", country kept"
+3,"Outdated / formal country names (Syrian Arab Republic, Libyan Arab Jamahiriya, Swaziland ...)",511,Renamed to current short names
+4,NULL in icrc / nrcs_and_ifrc / nngo,9,Set to 0 (row totals already match UN+INGO)
+5,Incident date unknown (day and/or month missing),343,"Kept; date_precision flag added, period_date = 1st of known month / Jan 1"
+5,Date year differs from year column,0,None found
+6,nationals + internationals <> total_affected,0,Check only
+6,killed + wounded + kidnapped <> total_affected,0,Check only
+6,gender split <> total_affected,1,Flagged in dq_flag
+6,organisation split <> total_affected,1,Flagged in dq_flag
+6,Missing coordinates,14,Kept; has_coordinates = 0 (excluded from map only)
+6,Redundant column location_2 (WKT copy of lat/long),4153,Dropped
+9,Final rows in fact_incidents,4153,100% of raw rows retained

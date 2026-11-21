@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "P07 Aid Worker Security - C Field Journal"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "59edf02b-926c-4216-b9a4-c6ac2fb620ed"
+  }
+}

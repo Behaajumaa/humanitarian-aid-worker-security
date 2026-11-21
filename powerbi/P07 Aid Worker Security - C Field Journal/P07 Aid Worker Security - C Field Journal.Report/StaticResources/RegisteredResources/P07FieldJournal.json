@@ -1,0 +1,58 @@
+{
+  "name": "P07 Field Journal",
+  "dataColors": [
+    "#2B3A67",
+    "#E3A72F",
+    "#B4483A",
+    "#8AA39B",
+    "#5B6B9A",
+    "#D6CCBA"
+  ],
+  "foreground": "#1F2430",
+  "foregroundNeutralSecondary": "#6E6A62",
+  "background": "#F4EFE6",
+  "tableAccent": "#2B3A67",
+  "textClasses": {
+    "label": {
+      "fontSize": 9,
+      "fontFace": "Segoe UI",
+      "color": "#6E6A62"
+    },
+    "title": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1F2430"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "visualHeader": [
+          {
+            "show": false
+          }
+        ],
+        "title": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}

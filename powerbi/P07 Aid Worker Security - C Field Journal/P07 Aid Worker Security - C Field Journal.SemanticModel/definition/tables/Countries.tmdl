@@ -1,0 +1,33 @@
+table Countries
+	lineageTag: 0a701d86-697e-44b2-b686-5024e6ef8df1
+
+	column country
+		dataType: string
+		lineageTag: 072e2a41-14f2-4af1-ab74-ab98d6885388
+		summarizeBy: none
+		sourceColumn: country
+
+	column country_code
+		dataType: string
+		lineageTag: 0dac00aa-9e8e-4454-83ab-c5f1616e9863
+		summarizeBy: none
+		sourceColumn: country_code
+
+	column world_region
+		dataType: string
+		lineageTag: 6f21a585-466e-4b2c-a3a8-262160179a48
+		summarizeBy: none
+		sourceColumn: world_region
+
+	partition Countries = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Desktop\Data Analysis Projects\07_Humanitarian_Aid_Analysis\data\clean\dim_country.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Selected = Table.SelectColumns(Promoted, {"country", "country_code", "world_region"}),
+				    Blanks = Table.ReplaceValue(Selected, "", null, Replacer.ReplaceValue, {"country", "country_code", "world_region"}),
+				    Typed = Table.TransformColumnTypes(Blanks, {{"country", type text}, {"country_code", type text}, {"world_region", type text}}, "en-US")
+				in
+				    Typed
+

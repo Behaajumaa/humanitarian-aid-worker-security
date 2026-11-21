@@ -1,0 +1,9 @@
+relationship edee56d0-21db-4c09-b7c2-d89ea4e02f7b
+	fromColumn: Incidents.country
+	toColumn: Countries.country
+
+relationship 6bef571f-2495-4bfb-86fb-b5c63439a0c7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Incidents.incident_date
+	toColumn: LocalDateTable_ee70757e-85e4-4ac8-a019-019f0e6c68c4.Date
+

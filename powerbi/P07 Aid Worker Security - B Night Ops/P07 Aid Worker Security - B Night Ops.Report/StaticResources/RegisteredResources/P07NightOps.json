@@ -1,0 +1,58 @@
+{
+  "name": "P07 Night Ops",
+  "dataColors": [
+    "#3DDC97",
+    "#FF6B5B",
+    "#F5B700",
+    "#6CB4EE",
+    "#3A4452",
+    "#8B96A5"
+  ],
+  "foreground": "#E6EDF3",
+  "foregroundNeutralSecondary": "#8B96A5",
+  "background": "#0E1116",
+  "tableAccent": "#3DDC97",
+  "textClasses": {
+    "label": {
+      "fontSize": 9,
+      "fontFace": "Segoe UI",
+      "color": "#8B96A5"
+    },
+    "title": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#E6EDF3"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "visualHeader": [
+          {
+            "show": false
+          }
+        ],
+        "title": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}
